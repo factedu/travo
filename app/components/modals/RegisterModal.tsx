@@ -33,11 +33,18 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ }) => {
             setIsLoading(true);
             const response = await axios.post('/api/auth/register', data);
             console.log(response);
+            // if response is error then show error toast
+            if (response?.data?.error) {
+                toast.error(response?.data?.error);
+            }
             // close register modal
             registerModal.onClose();
         } catch (error) {
             // show error toast
+            console.log(error);
             toast.error('Something went wrong');
+            setIsLoading(false);
+            registerModal.onClose();
         } finally {
             setIsLoading(false);
         }
