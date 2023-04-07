@@ -4,14 +4,22 @@ import { AiOutlineMenu } from 'react-icons/ai';
 import Avatar from '../Avatar';
 import MenuItem from './MenuItem';
 import useRegisterModal from '@/app/hooks/useRegistraterModal';
+import useLoginModal from '@/app/hooks/useLoginModal';
+import { User } from '@prisma/client';
+import { signOut } from 'next-auth/react';
 
-type Props = {}
+interface UserMenuProps {
+    currentUser?: User | null;
+}
 
-const UserMenu = (props: Props) => {
+const UserMenu: React.FC<UserMenuProps> = ({
+    currentUser
+}) => {
     const [isOpen, setIsOpen] = useState(false);
 
     // use register modal hook
     const registerModal = useRegisterModal();
+    const loginModal = useLoginModal();
 
     //callback function to toggle the open state
     const toggleOpen = useCallback(() => {
@@ -83,13 +91,26 @@ const UserMenu = (props: Props) => {
                     '
                 >
                     <div className='flex flex-col cursor-pointer'>
-                        <>
-                            <MenuItem
-                                label='Login'
-                                onClick={() => { }}
-                            />
-                            <MenuItem label='Sign up' onClick={registerModal.onOpen} />
-                        </>
+                        {
+                            currentUser ? (
+                                <>
+                                    <MenuItem label='My Trips' onClick={() => { }} />
+                                    <MenuItem label='My Favorites' onClick={() => { }} />
+                                    <MenuItem label='My Reservations' onClick={() => { }} />
+                                    <MenuItem label='My Properties' onClick={() => { }} />
+                                    <MenuItem label='Travo your home' onClick={() => { }} />
+                                    <hr />
+                                    <MenuItem label='Profile' onClick={() => { }} />
+                                    <MenuItem label='Logout' onClick={() => signOut()} />
+                                </>
+                            ) : (
+                                <>
+                                    <MenuItem label='Login' onClick={loginModal.onOpen} />
+                                    <MenuItem label='Sign up' onClick={registerModal.onOpen} />
+                                </>
+                            )
+                        }
+
                     </div>
                 </div>
             )}

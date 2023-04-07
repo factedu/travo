@@ -5,63 +5,74 @@ import axios from 'axios'
 import { AiFillGithub } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import useRegisterModal from '@/app/hooks/useRegistraterModal';
+import { signIn } from 'next-auth/react';
 import Modal from './Modal';
 import Heading from '../Heading';
 import Input from '../inputs/Input';
 import { toast } from 'react-hot-toast';
 import Button from '../Button';
+import useLoginModal from '@/app/hooks/useLoginModal';
+import useRegisterModal from '@/app/hooks/useRegistraterModal';
+import { callbackify } from 'util';
+import { useRouter } from 'next/navigation';
 
-interface RegisterModalProps { }
+interface LoginModalProps { }
 
-const RegisterModal: React.FC<RegisterModalProps> = ({ }) => {
+const LoginModal: React.FC<LoginModalProps> = ({ }) => {
+    const loginModal = useLoginModal();
     const registerModal = useRegisterModal();
+    const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm<FieldValues>({
         defaultValues: {
             email: '',
-            password: '',
-            confirmPassword: '',
-            name: '',
+            password: ''
         }
     });
 
     //handle form submit
     const onSubmit: SubmitHandler<FieldValues> = useCallback(async (data) => {
-        try {
-            setIsLoading(true);
-            const response = await axios.post('/api/auth/register', data);
-            console.log(response);
-            // close register modal
-            registerModal.onClose();
-        } catch (error) {
-            // show error toast
-            toast.error('Something went wrong');
-        } finally {
-            setIsLoading(false);
-        }
+        //set loading state
+        setIsLoading(true);
+
+        // signin using next-auth
+        signIn('credentials', {
+            redirect: false,
+            ...data
+        }).then((callback) => {
+            // if callback is ok
+            if (callback?.ok) {
+                //show success toast
+                toast.success('Login successful!');
+                // refresh the router
+                router.refresh();
+                //close the modal
+                loginModal.onClose();
+            }
+
+            // if callback is error
+            if (callback?.error) {
+                //show error toast
+                toast.error(callback.error);
+
+            }
+        }).catch((err) => {
+            // if error
+            toast.error(err.message);
+        });
     }, []);
 
     const bodyContent = (
         <div className='flex flex-col gap-4'>
             <Heading
-                title='Welcome to Travo'
-                subTitle='Sign up to continue'
-                center
+                title='Welcome Back!'
+                subTitle='Login to your account!'
+                center={false}
             />
             <Input
                 id="email"
                 label='Email'
                 type='email'
-                disabled={isLoading}
-                register={register}
-                errors={errors}
-                required
-            />
-            <Input
-                id="name"
-                label='Name'
-                type='text'
                 disabled={isLoading}
                 register={register}
                 errors={errors}
@@ -102,11 +113,11 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ }) => {
             <div
                 className='text-neutral-500 text-center mt-4 font-light flex flex-row justify-center items-center gap-2'
             >
-                Already have an account?
+                Don't have an account yet?
                 <div
-                    onClick={registerModal.onClose}
+                    onClick={loginModal.onClose}
                     className='text-neutral-800 font-semibold cursor-pointer hover:underline'>
-                    Login
+                    Register
                 </div>
             </div>
         </div>
@@ -115,10 +126,10 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ }) => {
     return (
         <Modal
             disabled={isLoading}
-            isOpen={registerModal.isOpen}
-            title='Sign Up'
+            isOpen={loginModal.isOpen}
+            title='Login'
             actionLabel='Continue'
-            onClose={registerModal.onClose}
+            onClose={loginModal.onClose}
             onSubmit={handleSubmit(onSubmit)}
             body={bodyContent}
             footer={footerContent}
@@ -126,4 +137,4 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ }) => {
     )
 }
 
-export default RegisterModal
+export default LoginModal

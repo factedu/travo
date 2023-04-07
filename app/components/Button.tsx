@@ -10,6 +10,7 @@ interface ButtonProps {
     outline?: boolean;
     small?: boolean;
     icon?: IconType;
+    variant?: 'primary' | 'secondary' | 'tertiary';
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -18,8 +19,16 @@ const Button: React.FC<ButtonProps> = ({
     disabled,
     outline,
     small,
-    icon: Icon
+    icon: Icon,
+    variant = 'primary'
 }) => {
+
+    let outlineClass = outline ? 'bg-white border-rose-500 text-rose-500' : 'bg-rose-500 border-rose-500 text-white';
+
+    if (variant === 'secondary') {
+        outlineClass = outline ? 'bg-white border-black text-black' : 'bg-black border-black text-white';
+    }
+
     return (
         <button
             onClick={onClick}
@@ -34,7 +43,7 @@ const Button: React.FC<ButtonProps> = ({
                 duration-300
                 w-full
                 border-[1px]
-                ${outline ? 'bg-white border-rose-500 text-rose-500' : 'bg-rose-500 border-rose-500 text-white'}
+                ${outlineClass}
                 ${small ? 'py-1 text-sm font-light border-[1px]' : 'py-3 text-md font-semibold border-2'}
             `}
         >

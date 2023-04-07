@@ -16,7 +16,7 @@ const Heading: React.FC<HeadingProps> = ({
             className={`flex flex-col gap-2 ${center ? 'text-center' : 'text-start'}`}
         >
             <div className='text-2xl font-semibold'>{title}</div>
-            {subTitle && <div className='font-light text-neutral-500 mt-2'>{subTitle}</div>}
+            {subTitle && <div className='font-light text-neutral-500 mt-0'>{subTitle}</div>}
         </div>
     )
 }
