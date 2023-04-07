@@ -30,6 +30,12 @@ const LoginModal: React.FC<LoginModalProps> = ({ }) => {
         }
     });
 
+    // toggle between login and register
+    const toggleModal = useCallback(() => {
+        loginModal.onClose();
+        registerModal.onOpen();
+    }, [loginModal, registerModal]);
+
     //handle form submit
     const onSubmit: SubmitHandler<FieldValues> = useCallback(async (data) => {
         //set loading state
@@ -116,9 +122,9 @@ const LoginModal: React.FC<LoginModalProps> = ({ }) => {
             <div
                 className='text-neutral-500 text-center mt-4 font-light flex flex-row justify-center items-center gap-2'
             >
-                Don't have an account yet?
+                First time using Travo?
                 <div
-                    onClick={loginModal.onClose}
+                    onClick={toggleModal}
                     className='text-neutral-800 font-semibold cursor-pointer hover:underline'>
                     Register
                 </div>
