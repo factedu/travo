@@ -8,6 +8,7 @@ const nextConfig = {
       'images.unsplash.com',
       'images.pexels.com',
       'avatars.githubusercontent.com',
+      'lh3.googleusercontent.com',
     ],
   }
 }

@@ -90,7 +90,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ }) => {
                 icon={FcGoogle}
                 disabled={isLoading}
                 variant='secondary'
-                onClick={() => { }}
+                onClick={() => signIn('google')}
             />
             <Button
                 outline={true}
