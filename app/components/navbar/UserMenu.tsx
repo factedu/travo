@@ -7,6 +7,7 @@ import useRegisterModal from '@/app/hooks/useRegistraterModal';
 import useLoginModal from '@/app/hooks/useLoginModal';
 import { signOut } from 'next-auth/react';
 import { SafeUser } from '@/app/types';
+import useRentModal from '@/app/hooks/useRentModal';
 
 interface UserMenuProps {
     currentUser?: SafeUser | null;
@@ -20,11 +21,23 @@ const UserMenu: React.FC<UserMenuProps> = ({
     // use register modal hook
     const registerModal = useRegisterModal();
     const loginModal = useLoginModal();
+    const rentModal = useRentModal();
 
     //callback function to toggle the open state
     const toggleOpen = useCallback(() => {
         setIsOpen((prev) => !prev);
     }, []);
+
+    // rent modal
+    const onRent = useCallback(() => {
+        // if user is not logged in open the login modal
+        if (!currentUser) {
+            return loginModal.onOpen();
+        }
+        // if user is logged in open the rent modal
+        rentModal.onOpen();
+
+    }, [currentUser, loginModal]);
 
 
     return (
@@ -33,7 +46,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
         >
             <div className='flex flex-row items-center gap-3'>
                 <div
-                    onClick={() => { }}
+                    onClick={onRent}
                     className='
                         hidden
                         md:block

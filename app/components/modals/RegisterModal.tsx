@@ -12,11 +12,13 @@ import Heading from '../Heading';
 import Input from '../inputs/Input';
 import { toast } from 'react-hot-toast';
 import Button from '../Button';
+import useLoginModal from '@/app/hooks/useLoginModal';
 
 interface RegisterModalProps { }
 
 const RegisterModal: React.FC<RegisterModalProps> = ({ }) => {
     const registerModal = useRegisterModal();
+    const loginModal = useLoginModal();
     const [isLoading, setIsLoading] = useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm<FieldValues>({
         defaultValues: {
@@ -26,6 +28,12 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ }) => {
             name: '',
         }
     });
+
+    // toggle between login and register
+    const toggleModal = useCallback(() => {
+        registerModal.onClose();
+        loginModal.onOpen();
+    }, [registerModal, loginModal]);
 
     //handle form submit
     const onSubmit: SubmitHandler<FieldValues> = useCallback(async (data) => {
@@ -55,7 +63,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ }) => {
             <Heading
                 title='Welcome to Travo'
                 subTitle='Sign up to continue'
-                center
+                center={false}
             />
             <Input
                 id="email"
@@ -112,7 +120,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ }) => {
             >
                 Already have an account?
                 <div
-                    onClick={registerModal.onClose}
+                    onClick={toggleModal}
                     className='text-neutral-800 font-semibold cursor-pointer hover:underline'>
                     Login
                 </div>
