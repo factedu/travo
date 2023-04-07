@@ -1,18 +1,39 @@
-### TRAVO WEB APP
+# TRAVO WEB APP
 
-## Author
-Ravi S Singh
+## Stack
+ - NextJS 13.x (experimental) (FrontEnd + BackEnd)
+ - ReactJS 18.x
+ - Tailwind css
+ - Prisma (database ORM)
+ - MongoDB (database)
+
+# Features
+## Authentication
+ - Email/password
+ - Google
+ - Github
+
+# Author
+## Ravi S Singh
 ## Social contact
 - Web : https://ravissingh.wordpress.com
 - Twitter: https://twitter.com/factedu
 - Linkedin: https://www.linkedin.com/in/ravi-s-singh
 
+# Branching
+ - main
+ - day1_navbar (Setting up, Adding Tailwind css)
+ - day2_auth (Login and Registration Modal Design)
+ - day3_prisma (Setting up prisma and mongoDb atlas, Social login)
+ - day4_catagory (Category UI)
+
+# Project Overview
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# Getting Started
 
-First, run the development server:
+### First, run the development server:
 
 ```bash
 npm run dev
